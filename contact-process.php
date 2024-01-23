@@ -1,7 +1,5 @@
 <?php
 
-use google\appengine\api\mail\Message;
-
 // Set email configuration
 $emailTo = 'sharandeep.sandhu29@gmail.com'; // Change with your Email address
 
@@ -18,28 +16,31 @@ if (empty($contactSubject) || !filter_var($contactSubject, FILTER_VALIDATE_EMAIL
 
 // If no validation errors, proceed to send the email
 try {
-    // Create a new Message
-    $message = new Message();
-
-    // Set sender and recipient
-    $message->setSender($emailTo);
-    $message->addTo($contactSubject);
-
     // Set email subject
-    $message->setSubject('TrainoMart - Contact form');
+    $subject = 'TrainoMart - Contact form';
 
     // Set email body (HTML content)
     $body = "Name: $contactName<br>Phone: $contactEmail<br>Email: $contactSubject<br>Message: $contactMessage";
-    $message->setHtmlBody($body);
 
-    // Send the email
-    $message->send();
+    // Additional headers
+    $headers = "From: $emailTo\r\n";
+    $headers .= "Reply-To: $contactSubject\r\n";
+    $headers .= "Content-Type: text/html\r\n";
 
-    // Display an alert using JavaScript
-    echo '<script>';
-    echo 'alert("Email has been sent successfully");';
-    echo 'window.location.href = "index.html";';  // Redirect to index.html
-    echo '</script>';
+    // Send the email using Amazon SES SMTP credentials
+    $result = mail($emailTo, $subject, $body, $headers);
+
+    // Check if the email was sent successfully
+    if ($result) {
+        // Display an alert using JavaScript
+        echo '<script>';
+        echo 'alert("Email has been sent successfully");';
+        echo 'window.location.href = "index.html";';  // Redirect to index.html
+        echo '</script>';
+    } else {
+        // Display an alert if there was an issue sending the email
+        echo '<script>alert("Unable to send mail.");</script>';
+    }
 } catch (Exception $e) {
     // Handle the exception and display an error message
     echo '<script>alert("Unable to send mail. Error: ' . $e->getMessage() . '");</script>';
