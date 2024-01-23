@@ -3,7 +3,7 @@
 use google\appengine\api\mail\Message;
 
 // Set email configuration
-$emailTo = 'manishguptaa33@gmail.com'; // Change with your Email address
+$emailTo = 'sharandeep.sandhu29@gmail.com'; // Change with your Email address
 
 // Get form data (make sure to sanitize and validate user inputs)
 $contactName = isset($_POST["contactName"]) ? $_POST["contactName"] : "";
